@@ -85,7 +85,7 @@
 				
 				rewind(file);
 				while(fscanf(file, "%s %s", usuario, senha) != EOF) {
-				    printf("Nome: %s, senha: %s\n", usuario, senha);
+				    printf("Nome1: %s, senha: %s\n", usuario, senha);
 				}
 				fclose(file);
 		        break;     

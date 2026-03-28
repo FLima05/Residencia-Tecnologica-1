@@ -13,6 +13,7 @@
 		int opcao;
 		
 		Medicamentos = fopen("Medicamentos.txt", "a+"); //a+ para criar e adicionar
+	
 		file = fopen("cadastro.txt", "a+");
 		
 		
@@ -51,7 +52,18 @@
 		   	   	   	printf ("3- Sair\n\n");
 		   	   	   	printf ("Digite sua opcao: ");
 		   	   	   	scanf ("%d", &opcao);
-							
+					
+					switch (opcao)
+					{
+					case 1:
+						if (Medicamentos == NULL) {
+    printf("ERRO ao abrir arquivo!\n");
+} else {
+    printf("Arquivo aberto com sucesso!\n");
+}
+						cadastraMedicamento(Medicamentos);// Esse bgl puxa o codigo lá do fim dps do return
+						break;
+					}
 				    }
 				    
 				    else {
@@ -120,6 +132,67 @@
 			    printf("\n\nOpcao nao encontrada...");
 				
 			   	}
-			   	
+				
+			   	fclose(Medicamentos);
 		return 0;
 	}
+	void cadastraMedicamento(FILE *Medicamentos) {
+		float PrecoCompra;
+		float PrecoVenda;
+		int OpcaoCategoria;
+		char categoria[30];
+		printf("Qual é o preço de compra desse medicamento:");
+		scanf("%f" , &PrecoCompra);
+		printf("Qual é o preço de venda desse medicamento:");
+		scanf("%f" , &PrecoVenda);
+			 while (PrecoCompra > PrecoVenda)
+			 {
+			 printf("ERRO!!preco de venda menor que o de compra.\n");
+				printf("Insira o valor de compra: ");
+				scanf("%f" , &PrecoCompra);
+				printf("Insira o valor de venda: ");
+				scanf("%f" , &PrecoVenda);
+			 }
+			
+		printf("Qual é a categoria desse medicamento:\n");
+		printf("1- Analgesico \n2- Antibiotico \n3- Anti-inflamatorio \n4- antidepressivos \n5- outros\n");	
+		printf("Opcao: ");
+		scanf("%d" , &OpcaoCategoria);
+		while (OpcaoCategoria < 1 || OpcaoCategoria > 5)
+		{
+			printf("ERRO!!Digite algumas das opções listadas acima.\n");
+			printf("Qual é a categoria desse medicamento:\n");
+		printf("1- Analgesico \n2- Antibiotico \n3- Anti-inflamatorio \n4- antidepressivos \n5- outros\n");	
+		printf("Opcao: ");
+		scanf("%d" , &OpcaoCategoria);
+		}
+		if (OpcaoCategoria == 1)
+		{
+			strcpy(categoria, "Analgesico");
+		}
+		
+		else if (OpcaoCategoria == 2)
+		{
+			strcpy(categoria, "Antibiotico");
+		}
+		else if (OpcaoCategoria == 3)
+		{
+			strcpy(categoria, "Anti-inflamatorio");
+		}
+		else if (OpcaoCategoria == 4)
+		{
+			strcpy(categoria, "antidepressivos");
+		}
+		else if (OpcaoCategoria == 5)
+		{
+			strcpy(categoria, "outros");
+		}
+		if (Medicamentos == NULL) {
+    	printf("Erro ao abrir arquivo!\n");
+}
+		fprintf(Medicamentos ,"%.2f %.2f %s.\n" ,PrecoCompra, PrecoVenda, categoria);
+		fflush(Medicamentos);
+		printf("Salvando no arquivo...\n");
+		printf("Arquivo salvo!\n");
+		 }
+			

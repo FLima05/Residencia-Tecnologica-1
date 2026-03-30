@@ -51,8 +51,55 @@
 		   	   	   	printf ("3- Sair\n\n");
 		   	   	   	printf ("Digite sua opcao: ");
 		   	   	   	scanf ("%d", &opcao);
-							
-				    }
+					
+						//Cadastro de Medicamentos(Bruno)
+			
+			switch(opcao){
+			    
+			    case 1:
+			
+						
+						    
+						    char m[30]="";
+						    char f[30]="";
+
+
+						printf("====>Cadastro de medicamentos<====\n\n");
+                        int c;
+                       
+                       
+                        while ((c = getchar()) != '\n' && c != EOF);
+						
+						printf("Insira o nome do medicamento: \n");
+					     fgets(m, 30, stdin);
+					 
+				
+				
+					
+						printf("Insira o nome do fabricante: \n");
+					    fgets(f, 30, stdin);
+					    
+		printf("===>Dados Inseridos<===\n\n");
+					
+					    printf("medicamento: %s\n", m);
+						printf("fabricante: %s\n", f);
+				
+
+
+						
+						
+						break;
+			}
+				    //fim	
+
+
+
+
+				    
+				
+				
+				
+				}
 				    
 				    else {
 				     printf("NÂO ENCONTRADO");   

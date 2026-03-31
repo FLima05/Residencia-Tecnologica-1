@@ -169,7 +169,7 @@ int main() {
 	
 	while(opcaoLogin != 5) {	
 			
-			printf ("---> Estoque de Medicamentos\n\n---> MENU <---\n\n");
+			printf ("---> Estoque de Medicamentos a\n\n---> MENU <---\n\n");
 			printf("1- Logar num usuario existente\n");
 			printf("2- Novo usuario\n");
 			printf("3- ver todos os usuarios cadastrados\n");   

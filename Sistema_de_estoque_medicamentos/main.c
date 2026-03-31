@@ -1,125 +1,315 @@
 #include <stdio.h>
-	#include <string.h>
+#include <string.h>
+
+
+void cadastraMedicamento(FILE *Medicamentos) {
 	
-	int main() {
+	Medicamentos = fopen("Medicamentos.txt", "a+");
+	
+	char medicamento[50];
+	int quantidade;
+	char fabricante[50];
+	char lote[50];
+	int diaF, mesF, anoF;
+	int diaV, mesV, anoV;
+	float PrecoCompra;
+	float PrecoVenda;
+	char categoria[50];
+	int OpcaoCategoria, c;
+	
+	while((c = getchar()) != '\n' && c != EOF); // Limpa o buffer de entrada para evitar problemas com scanf
+
+	printf("Qual é o nome do medicamento:");
+	fgets(medicamento, sizeof(medicamento), stdin);
+	medicamento[strcspn(medicamento, "\n")] = '\0'; // Remove a nova linha do final da string
+
+	printf("Qual é a quantidade desse medicamento:");
+	scanf("%d" , &quantidade);
+
+	while((c = getchar()) != '\n' && c != EOF); // Limpa o buffer de entrada para evitar problemas com scanf
+
+	printf("Qual é o fabricante desse medicamento:");
+	fgets(fabricante, sizeof(fabricante), stdin);
+	fabricante[strcspn(fabricante, "\n")] = '\0'; // Remove a nova linha do final da string
+
+	printf("Qual é o lote desse medicamento:");
+	scanf("%s" , lote);
+
+	printf("Qual é a data de fabricação desse medicamento? (ex:dd/mm/aaaa):");
+	scanf("%d/%d/%d" , &diaF, &mesF, &anoF);
+
+	printf("Qual é a data de validade desse medicamento? (ex:dd/mm/aaaa):");
+	scanf("%d/%d/%d" , &diaV, &mesV, &anoV);
+
+	while(diaV < diaF || (diaV == diaF && mesV < mesF) || (diaV == diaF && mesV == mesF && anoV < anoF)) {
+		printf("ERRO!!Data de validade anterior à data de fabricação.\n");
+		printf("Qual é a data de validade desse medicamento? (ex:dd/mm/aaaa):");
+		scanf("%d/%d/%d" , &diaV, &mesV, &anoV);
+	}
+
+	printf("Qual é o preço de compra desse medicamento:");
+	scanf("%f" , &PrecoCompra);
+	printf("Qual é o preço de venda desse medicamento:");
+	scanf("%f" , &PrecoVenda);
 		
-		FILE *Medicamentos;
-		FILE *file;
+	while (PrecoCompra > PrecoVenda) {
 		
-		char usuario[50];
-		char senha[50];
-		char senhacerta[50];
-		int opcaoLogin;
-		int opcao;
+		printf("ERRO!!preco de venda menor que o de compra.\n");
+		printf("Insira o valor de compra: ");
+		scanf("%f" , &PrecoCompra);
+		printf("Insira o valor de venda: ");
+		scanf("%f" , &PrecoVenda);
+	}
+			
+	printf("Qual é a categoria desse medicamento:\n");
+	printf("1- Analgesico \n2- Antibiotico \n3- Anti-inflamatorio \n4- antidepressivos \n5- outros\n");	
+	printf("Opcao: ");
+	scanf("%d" , &OpcaoCategoria);
+	
+	while (OpcaoCategoria < 1 || OpcaoCategoria > 5)
+	{
+		printf("ERRO!!Digite algumas das opções listadas acima.\n");
+		printf("Qual é a categoria desse medicamento:\n");
+		printf("1- Analgesico \n2- Antibiotico \n3- Anti-inflamatorio \n4- antidepressivos \n5- outros\n");	
+		printf("Opcao: ");
+		scanf("%d" , &OpcaoCategoria);
+	}
+	    if (OpcaoCategoria == 1)
+		{
+			strcpy(categoria, "Analgesico");
+		}
 		
-		Medicamentos = fopen("Medicamentos.txt", "a+"); //a+ para criar e adicionar
-		file = fopen("cadastro.txt", "a+");
-		
-		
-		printf ("---> Estoque de Medicamentos\n\n---> MENU <---\n\n");
-		printf("1- Logar num usuario existente\n");
-		printf("2- Novo usuario\n");
-		printf("3- ver todos os usuarios cadastrados\n");   
-		printf("4- deletar cadastrado\n\n");
-		scanf ("%d", &opcaoLogin);
-				
-				switch(opcaoLogin){
-				case 1:
-					
-					int encontrado = 0;
-					char  usuario_encontrar[50];
-					
-					printf ("Usuario: ");
-					scanf("%s", usuario_encontrar);
-					printf ("Senha: ");
-					scanf("%s", senha);
-					
-					rewind(file); 
-				    while(fscanf(file, "%s %s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
-				        if(strcmp(usuario, usuario_encontrar) == 0) { //Compara os usuarios (usuario, usuario_encontrar)
-				            encontrado++;
-				        }
-				    }
-				    
-				    if(encontrado == 1) {
-				        printf("encontrado");
-				        
-				        	printf ("\n\nBem-vindo de volta, %s\n\n", usuario);
-					
-					printf ("1- Cadastrar medicamento\n");
-		   	   	   	printf ("2- Acessar Estoque\n");
-		   	   	   	printf ("3- Sair\n\n");
-		   	   	   	printf ("Digite sua opcao: ");
-		   	   	   	scanf ("%d", &opcao);
+		else if (OpcaoCategoria == 2)
+		{
+			strcpy(categoria, "Antibiotico");
+		}
+		else if (OpcaoCategoria == 3)
+		{
+			strcpy(categoria, "Anti-inflamatorio");
+		}
+		else if (OpcaoCategoria == 4)
+		{
+			strcpy(categoria, "antidepressivos");
+		}
+		else if (OpcaoCategoria == 5)
+		{
+			strcpy(categoria, "outros");
+		}
+		if (Medicamentos == NULL) {
+    	printf("Erro ao abrir arquivo!\n");
+		}
+
+		fprintf(Medicamentos ,"%s-%d-%s-%s-%d/%d/%d-%d/%d/%d-%.2f-%.2f-%s\n" , medicamento, quantidade, fabricante, lote, diaF, mesF, anoF, diaV, mesV, anoV, PrecoCompra, PrecoVenda, categoria);
+		fflush(Medicamentos);
+		printf("Salvando no arquivo...\n");
+		printf("Arquivo salvo!\n");
+		fclose(Medicamentos);
+}
+
+void cadastrarUsuario(FILE *usuarios) {
+						
+	usuarios = fopen("cadastro.txt", "a+");
+
+	char usuario[50];
+	char senha[50];
+	char senhacerta[50];
+	printf ("Escolha seu nome de usuario: ");
+	scanf("%s", usuario);
+	printf ("Escolha sua senha: ");
+	scanf("%s", senha);
+	printf ("Confirme sua senha: ");
+	scanf("%s", senhacerta);
+
+	int c = 0;
+	while((c = getchar()) != '\n' && c != EOF); 
+						
+	if (strcmp(senha, senhacerta) == 0) {
+		printf ("\n\nNovo usuario cadastrado! Bem vindo, %s\n\n", usuario);
+		fprintf(usuarios, "%s %s\n", usuario, senha);
+		fflush(usuarios);
+	}
 							
-				    }
-				    
-				    else {
-				     printf("NÂO ENCONTRADO");   
-				    }
-				    
-				    break;
+	else {printf ("Senhas não conferem, usuario nao cadastrado!\n\n");
+	}
+	fclose(usuarios);
+						
+}
+
+void acessarEstoque(FILE* Medicamentos) {
+	
+	Medicamentos = fopen("Medicamentos.txt", "r");
+	
+	rewind(Medicamentos);
+	char medicamento[50];
+	int quantidade;
+	char fabricante[50];
+	char lote[50];
+	int diaF, mesF, anoF;
+	int diaV, mesV, anoV;
+	float PrecoCompra;
+	float PrecoVenda;
+	char categoria[50];
+	
+
+	while(fscanf(Medicamentos, "%49[^-]-%d-%49[^-]-%49[^-]-%d/%d/%d-%d/%d/%d-%f-%f-%s\n", medicamento, &quantidade, fabricante, lote, &diaF, &mesF, &anoF, &diaV, &mesV, &anoV, &PrecoCompra, &PrecoVenda, categoria) != EOF) {
+		printf("Medicamento: %s\nquantidade: %d\nFabricante: %s\nLote: %s\nData de Fabricação: %02d/%02d/%04d\nData de Validade: %02d/%02d/%04d\nPreço de Compra: %.2f\nPreço de Venda: %.2f\nCategoria: %s\n\n", medicamento, quantidade, fabricante, lote, diaF, mesF, anoF, diaV, mesV, anoV, PrecoCompra, PrecoVenda, categoria);
+	}
+	fclose(Medicamentos);
+}
+
+int main() {
+		
+	FILE *Medicamentos;
+	FILE *usuarios;
+		
+	char usuario[50];
+	char senha[50];
+	
+	int opcaoLogin = 0;
+	
+	while(opcaoLogin != 5) {	
+			
+			printf ("---> Estoque de Medicamentos\n\n---> MENU <---\n\n");
+			printf("1- Logar num usuario existente\n");
+			printf("2- Novo usuario\n");
+			printf("3- ver todos os usuarios cadastrados\n");   
+			printf("4- deletar cadastrado\n");
+			printf("5- Sair\n");
+			printf("Digite sua opcao: ");
+			scanf ("%d", &opcaoLogin);
+					
+					switch(opcaoLogin){
+					case 1:
+						
+						Medicamentos = fopen("Medicamentos.txt", "a+");
+						usuarios = fopen("cadastro.txt", "r");
+						
+						int encontrado = 0;
+						int opcao = 0;
+						char  usuario_encontrar[50];
+						char senha_encontrar[50];
+						
+						while(encontrado == 0) {
+							printf ("Usuario: ");
+							scanf("%s", usuario_encontrar);
+							printf ("Senha: ");
+							scanf("%s", senha_encontrar);
+							
+							rewind(usuarios); // Volta para o início do arquivo para ler os dados desde o começo
+							while(fscanf(usuarios, "%s %s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
+								if(strcmp(usuario, usuario_encontrar) == 0 && strcmp(senha, senha_encontrar) == 0) { //Compara os usuarios (usuario, usuario_encontrar)
+									encontrado = 1;
+								}
+							}
+							
+							
+								if(encontrado == 1) {
+									
+									while(opcao != 3) {
+										printf ("\n\nBem-vindo de volta, %s\n\n", usuario);
+									
+										printf ("1- Cadastrar medicamento\n");
+										printf ("2- Acessar Estoque\n");
+										printf ("3- Sair\n\n");
+										printf ("Digite sua opcao: ");
+										scanf ("%d", &opcao);
+									
+										switch (opcao)
+										{
+										case 1:
+											if (Medicamentos == NULL) {
+												printf("ERRO ao abrir arquivo!\n");
+											} else {
+												printf("Arquivo aberto com sucesso!\n");
+											}
+										
+											cadastraMedicamento(Medicamentos);// Esse bgl puxa o codigo lá do começo, onde tem a função cadastraMedicamento, e executa ele aqui dentro do case 1, ou seja, quando o usuario escolher a opção 1, ele vai executar o código da função cadastraMedicamento.
+											break;
+										case 2:
+											printf("Acessando estoque...\n");
+											acessarEstoque(Medicamentos);
+											
+											break;
+										}
+									}
+								}
+								
+								else {
+									printf("Usuario ou senha incorretos, tente novamente!\n"); 
+								}
+							}
+								fclose(Medicamentos);
+								fclose(usuarios);
+						break;
+					
+									
+					case 2:
+						
+						cadastrarUsuario(usuarios);
+						
+						break;
+						
+					case 3: //Ver todos os usuarios
+					
+						usuarios = fopen("cadastro.txt", "r");
+
+						rewind(usuarios);
+						printf("Usuarios cadastrados:\n");
+						while(fscanf(usuarios, "%s %s", usuario, senha) != EOF) {
+							printf("Nome: %s\n", usuario);
+						}
+						fclose(usuarios);
+					
+					break;     
 				
-		   	   	   				
-				case 2:
+					case 4: //deletar
 					
-					printf ("Escolha seu nome de usuario: ");
-					scanf("%s", usuario);
-					printf ("Escolha sua senha: ");
-					scanf("%s", senha);
-					printf ("Confirme sua senha: ");
-					scanf("%s", senhacerta);
+						char busca[50];
+						FILE *temp;
+						temp = fopen("temp.txt", "w"); //w para apagar todos os dados e gravar novos nomes
 					
-					if (strcmp(senha, senhacerta) == 0) {
-						printf ("\n\nNovo usuario cadastrado! Bem vindo, %s\n\n", usuario);
-						fprintf(file, "%s %s\n", usuario, senha);
+						usuarios = fopen("cadastro.txt", "r"); //r para ler os nomes e comparar
+					
+						printf("Digite o nome para deletar: ");
+						scanf("%s", busca);
+
+						int c = 0;
+						while((c = getchar()) != '\n' && c != EOF); 
+						
+						int usuarioEncontrado = 0; 
+						while(fscanf(usuarios, "%49s %49s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
+							if(strcmp(usuario, busca) != 0) { //Compara os usuarios (usuario, busca) e se for diferente, grava no temp
+								fprintf(temp, "%s %s\n", usuario, senha);
+							}
+
+							else{ // encontrou o usuario, entao nao grava no temp, ou seja, deleta ele do cadastro
+								usuarioEncontrado = 1;
+							}
+							
 						}
 						
-					else {printf ("Senhas não conferem, usuario nao cadastrado!\n\n");
+						if(usuarioEncontrado == 0) {
+							printf("Usuario nao encontrado!\n");
+						} 
+						
+						else {
+
+							fclose(usuarios);
+							fclose(temp);
+							remove("cadastro.txt");
+							rename("temp.txt", "cadastro.txt");
+							remove("temp.txt");
+							printf("processo concluido!\n\n");
+						}
+					
+						break;
+				
+					default:
+					printf("\n\nFechando programa...");
+					
 					}
-					fclose(file);
+		}
 					
-					break;
+			return 0;
+		}
 					
-				case 3: //Ver todos os usuarios
-				
-				rewind(file);
-				while(fscanf(file, "%s %s", usuario, senha) != EOF) {
-				    printf("Nome1: %s, senha: %s\n", usuario, senha);
-				}
-				fclose(file);
-		        break;     
-		      
-		        case 4: //deletar
-		        
-		        char busca[50];
-		        FILE *temp;
-		        temp = fopen("temp.txt", "w"); //w para gravar nomes
-		        
-		        file = fopen("cadastro.txt", "r"); //r para ler os nomes e comparar
-		        
-		        printf("DIgite o nome para deletar: \n");
-		        scanf("%s", busca);
-		        
-		        while(fscanf(file, "%s %s", usuario, senha) != EOF) {
-				    if(strcmp(usuario, busca) != 0) {
-				        fprintf(temp, "%s %s\n", usuario, senha);
-				    }
-				}
-				
-				fclose(file);
-				fclose(temp);
-				remove("cadastro.txt");
-				rename("temp.txt", "cadastro.txt");
-				printf("processo concluido!");
-				
-				
-				break;
-		      
-	            default:
-			    printf("\n\nOpcao nao encontrada...");
-				
-			   	}
-			   	
-		return 0;
-	}

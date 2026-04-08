@@ -50,3 +50,7 @@ Projeto em desenvolvimento.
 
 * Linguagem: *C*
 
+---
+
+## Link do trello
+https://trello.com/invite/b/69c3ced405958303dddadef9/ATTIdcd118d1dc9de8bae2aeb1846e9bfcb014D62E55/sistema-de-estoque-de-medicamentos

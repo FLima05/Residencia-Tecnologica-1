@@ -109,7 +109,52 @@ void cadastrarUsuario(FILE *usuarios) {
 	fclose(usuarios);
 }
 
+void rastrearlote(FILE *Medicamentos) {
+    
+FILE *arquivo = fopen("medicamentos.txt", "r");
+if(arquivo== NULL){
+    printf("Erro ao acessar o banco de dados\n");
+    return;
+}
+  int n=50;
+  char lotebusca[n];
+  char med[n], lote[n], cat[n], fab[n];
+  int diaF, mesF, anoF, diaV, mesV, anoV;
+  int encontrado = 1;
+  
+  printf("==========>Busca por Lote<==========\n\n\n");
+  
+  printf("Digite o o lote do produto: \n");
+  scanf("%s", lotebusca);
+  printf("\n------------------------------------------------------\n");
+  printf("==>Resultados encontrados<==\n");
+ //
+ while(fscanf(Medicamentos,"%49[^-]-%49[^-]-%d-%d-%d-%d-%d-%d", lote, med, &diaF, &mesF, &anoF, &diaV, &mesV, &anoV)!=8){
+ 
+  //Compara se existe um produto identificado com o lote digitado.
+  if(strcmp(lote, lotebusca) == 0) {
+  printf("Nome: %s\n", med);
+  printf("fabricante: %s\n", fab);
+  printf("Data de Fabricação: %02d/%02d/%02d\n", diaF, mesF, anoF);
+  printf("Data de Validade: %02d/%02d/%02d\n", diaV, mesV, anoV);
+  int encontrado = 0;
+  }
+
+  fclose(arquivo);
+ }  
+}
 void acessarEstoque(FILE* Medicamentos) {
+    int o=0;
+	printf("======>ESTOQUE<======\n");
+
+printf("Ver Estoque: 1\n");
+printf("Pesquisar: 2\n");
+printf("Digite a sua opção: \n");
+scanf("%d", &o);
+
+switch(o){
+case 1:
+
 	Medicamentos = fopen("Medicamentos.txt", "r");
 	rewind(Medicamentos);
 	char medicamento[50];
@@ -125,6 +170,14 @@ void acessarEstoque(FILE* Medicamentos) {
 		printf("Medicamento: %s\nquantidade: %d\nFabricante: %s\nLote: %s\nData de FabricaC'C#o: %02d/%02d/%04d\nData de Validade: %02d/%02d/%04d\nPreC'o de Compra: %.2f\nPreC'o de Venda: %.2f\nCategoria: %s\n\n", medicamento, quantidade, fabricante, lote, diaF, mesF, anoF, diaV, mesV, anoV, PrecoCompra, PrecoVenda, categoria);
 	}
 	fclose(Medicamentos);
+	break;
+
+
+
+case 2:
+rastrearlote(Medicamentos);
+
+}
 }
 
 void sistemavendas(FILE *Medicamentos) {
@@ -362,4 +415,4 @@ int main() {
 	}
 	return 0;
 }
-
+//https://www.onlinegdb.com/#tab-stderr

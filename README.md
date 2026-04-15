@@ -68,7 +68,6 @@ O sistema cria e manipula os seguintes arquivos:
 - Biblioteca padrão:
   - `stdio.h`
   - `string.h`
-  - `stdlib.h`
 
 ---
 

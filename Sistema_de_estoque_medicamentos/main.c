@@ -2,7 +2,25 @@
 #include <string.h>
 #include <stdlib.h>
 
+int MenuInicial() {
+	
+	int opcaoLogin = 0;
+
+	printf ("---> Estoque de Medicamentos\n\n---> MENU <---\n\n");
+	printf("1- Logar num usuario existente\n");
+	printf("2- Novo usuario\n");
+	printf("3- ver todos os usuarios cadastrados\n");
+	printf("4- deletar cadastrado\n");
+	printf("5- Sair\n");
+	printf("Digite sua opcao: ");
+	scanf ("%d", &opcaoLogin);
+	
+	return opcaoLogin;
+}
+
+
 void cadastraMedicamento(FILE *Medicamentos) {
+	
 	Medicamentos = fopen("Medicamentos.txt", "a+");
 	char medicamento[50];
 	int quantidade;
@@ -16,29 +34,29 @@ void cadastraMedicamento(FILE *Medicamentos) {
 	int OpcaoCategoria, c;
 
 	while((c = getchar()) != '\n' && c != EOF); // Limpa o buffer de entrada para evitar problemas com scanf
-	printf("Qual C) o nome do medicamento:");
+	printf("Qual é o nome do medicamento:");
 	fgets(medicamento, sizeof(medicamento), stdin);
 	medicamento[strcspn(medicamento, "\n")] = '\0'; // Remove a nova linha do final da string
-	printf("Qual C) a quantidade desse medicamento:");
+	printf("Qual é a quantidade desse medicamento:");
 	scanf("%d", &quantidade);
 	while((c = getchar()) != '\n' && c != EOF); // Limpa o buffer de entrada para evitar problemas com scanf
-	printf("Qual C) o fabricante desse medicamento:");
+	printf("Qual é o fabricante desse medicamento:");
 	fgets(fabricante, sizeof(fabricante), stdin);
 	fabricante[strcspn(fabricante, "\n")] = '\0'; // Remove a nova linha do final da string
-	printf("Qual C) o lote desse medicamento:");
-	scanf("%s", lote);
-	printf("Qual C) a data de fabricaC'C#o desse medicamento? (ex:dd/mm/aaaa):");
+	printf("Qual é o lote desse medicamento:");
+	scanf("%49s", lote);
+	printf("Qual é a data de fabricação desse medicamento? (ex:dd/mm/aaaa):");
 	scanf("%d/%d/%d", &diaF, &mesF, &anoF);
-	printf("Qual C) a data de validade desse medicamento? (ex:dd/mm/aaaa):");
+	printf("Qual é a data de validade desse medicamento? (ex:dd/mm/aaaa):");
 	scanf("%d/%d/%d", &diaV, &mesV, &anoV);
-	while(diaV < diaF || (diaV == diaF && mesV < mesF) || (diaV == diaF && mesV == mesF && anoV < anoF)) {
-		printf("ERRO!!Data de validade anterior C  data de fabricaC'C#o.\n");
-		printf("Qual C) a data de validade desse medicamento? (ex:dd/mm/aaaa):");
+	while(anoV < anoF || (anoV == anoF && mesV < mesF) || (anoV == anoF && mesV == mesF && diaV < diaF)) {
+		printf("ERRO!!Data de validade anterior à data de fabricação.\n");
+		printf("Qual é a data de validade desse medicamento? (ex:dd/mm/aaaa):");
 		scanf("%d/%d/%d", &diaV, &mesV, &anoV);
 	}
-	printf("Qual C) o preC'o de compra desse medicamento:");
+	printf("Qual é o preço de compra desse medicamento:");
 	scanf("%f", &PrecoCompra);
-	printf("Qual C) o preC'o de venda desse medicamento:");
+	printf("Qual é o preço de venda desse medicamento:");
 	scanf("%f", &PrecoVenda);
 
 	while (PrecoCompra > PrecoVenda) {
@@ -48,14 +66,14 @@ void cadastraMedicamento(FILE *Medicamentos) {
 		printf("Insira o valor de venda: ");
 		scanf("%f", &PrecoVenda);
 	}
-	printf("Qual C) a categoria desse medicamento:\n");
+	printf("Qual é a categoria desse medicamento:\n");
 	printf("1- Analgesico \n2- Antibiotico \n3- Anti_inflamatorio \n4- antidepressivos \n5- outros\n");
 	printf("Opcao: ");
 	scanf("%d", &OpcaoCategoria);
 
 	while (OpcaoCategoria < 1 || OpcaoCategoria > 5) {
 		printf("ERRO!!Digite algumas das opC'C5es listadas acima.\n");
-		printf("Qual C) a categoria desse medicamento:\n");
+		printf("Qual é a categoria desse medicamento:\n");
 		printf("1- Analgesico \n2- Antibiotico \n3- Anti_inflamatorio \n4- antidepressivos \n5- outros\n");
 		printf("Opcao: ");
 		scanf("%d", &OpcaoCategoria);
@@ -91,11 +109,11 @@ void cadastrarUsuario(FILE *usuarios) {
 	char senha[50];
 	char senhacerta[50];
 	printf ("Escolha seu nome de usuario: ");
-	scanf("%s", usuario);
+	scanf("%49s", usuario);
 	printf ("Escolha sua senha: ");
-	scanf("%s", senha);
+	scanf("%49s", senha);
 	printf ("Confirme sua senha: ");
-	scanf("%s", senhacerta);
+	scanf("%49s", senhacerta);
 	int c = 0;
 	while((c = getchar()) != '\n' && c != EOF);
 	if (strcmp(senha, senhacerta) == 0) {
@@ -104,14 +122,69 @@ void cadastrarUsuario(FILE *usuarios) {
 		fflush(usuarios);
 	}
 	else {
-		printf ("Senhas nC#o conferem, usuario nao cadastrado!\n\n");
+		printf ("Senhas não conferem, usuario não cadastrado!\n\n");
 	}
 	fclose(usuarios);
 }
 
-void rastrearlote(FILE *Medicamentos) {
+void DeletarUsuario(FILE *usuarios) {
+	
+	char usuario[50];
+	char senha[50];
+	
+	char busca[50];
+	FILE *temp;
+			
+	temp = fopen("temp.txt", "w"); //w para apagar todos os dados e gravar novos nomes
+	usuarios = fopen("cadastro.txt", "r"); //r para ler os nomes e comparar
+			
+	printf("Digite o nome para deletar: ");
+	scanf("%49s", busca);
+
+	int c = 0;
+			
+	while((c = getchar()) != '\n' && c != EOF);
+			
+	int usuarioEncontrado = 0;
+			
+	while(fscanf(usuarios, "%49s %49s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
+		if(strcmp(usuario, busca) != 0) { //Compara os usuarios (usuario, busca) e se for diferente, grava no temp
+			fprintf(temp, "%s %s\n", usuario, senha);
+			}
+			else { // encontrou o usuario, entao nao grava no temp, ou seja, deleta ele do cadastro
+				usuarioEncontrado = 1;
+			}
+		}
+		if(usuarioEncontrado == 0) {
+			printf("Usuario nao encontrado!\n");
+		}
+		else {
+			fclose(usuarios);
+			fclose(temp);
+			remove("cadastro.txt");
+			rename("temp.txt", "cadastro.txt");
+			remove("temp.txt");
+			printf("processo concluido!\n\n");
+		}	
+}
+
+void verificarUsuario(FILE *usuarios) {
+	
+	char usuario[50];
+	char senha[50];
+
+	usuarios = fopen("cadastro.txt", "r");
+	rewind(usuarios);
+	printf("Usuarios cadastrados:\n");
+	while(fscanf(usuarios, "%s %s", usuario, senha) != EOF) {
+		printf("Nome: %s\n", usuario);
+	}
+	fclose(usuarios);
+}
+
+void rastrearlote() {
     
-FILE *arquivo = fopen("medicamentos.txt", "r");
+FILE *arquivo = fopen("Medicamentos.txt", "r");
 if(arquivo== NULL){
     printf("Erro ao acessar o banco de dados\n");
     return;
@@ -119,33 +192,37 @@ if(arquivo== NULL){
   int n=50;
   char lotebusca[n];
   char med[n], lote[n], cat[n], fab[n];
-  int diaF, mesF, anoF, diaV, mesV, anoV;
-  int encontrado = 1;
-  
+  int quantidade, diaF, mesF, anoF, diaV, mesV, anoV;
+  float PrecoCompra, PrecoVenda;
+
   printf("==========>Busca por Lote<==========\n\n\n");
   
   printf("Digite o o lote do produto: \n");
-  scanf("%s", lotebusca);
+  scanf("%49s", lotebusca);
   printf("\n------------------------------------------------------\n");
   printf("==>Resultados encontrados<==\n");
  //
- while(fscanf(Medicamentos,"%49[^-]-%49[^-]-%d-%d-%d-%d-%d-%d", lote, med, &diaF, &mesF, &anoF, &diaV, &mesV, &anoV)!=8){
+ while(fscanf(arquivo ,"%49[^-]-%d-%49[^-]-%49[^-]-%d/%d/%d-%d/%d/%d-%f-%f-%49[^\n]\n", med, &quantidade, fab, lote, &diaF, &mesF, &anoF, &diaV, &mesV, &anoV, &PrecoCompra, &PrecoVenda, cat) != EOF) {
  
   //Compara se existe um produto identificado com o lote digitado.
   if(strcmp(lote, lotebusca) == 0) {
   printf("Nome: %s\n", med);
+  printf("quantidade: %d\n", quantidade);
   printf("fabricante: %s\n", fab);
   printf("Data de Fabricação: %02d/%02d/%02d\n", diaF, mesF, anoF);
   printf("Data de Validade: %02d/%02d/%02d\n", diaV, mesV, anoV);
-  int encontrado = 0;
+  printf("Preço de Compra: %.2f\n", PrecoCompra);
+  printf("Preço de Venda: %.2f\n", PrecoVenda);
+  printf("Categoria: %s\n", cat);
+  printf("\n------------------------------------------------------\n");
   }
-
-  fclose(arquivo);
  }  
+	fclose(arquivo);
 }
+
 void acessarEstoque(FILE* Medicamentos) {
     int o=0;
-	printf("======>ESTOQUE<======\n");
+	printf("\n======>ESTOQUE<======\n");
 
 printf("Ver Estoque: 1\n");
 printf("Pesquisar: 2\n");
@@ -167,7 +244,7 @@ case 1:
 	float PrecoVenda;
 	char categoria[50];
 	while(fscanf(Medicamentos, "%49[^-]-%d-%49[^-]-%49[^-]-%d/%d/%d-%d/%d/%d-%f-%f-%s\n", medicamento, &quantidade, fabricante, lote, &diaF, &mesF, &anoF, &diaV, &mesV, &anoV, &PrecoCompra, &PrecoVenda, categoria) != EOF) {
-		printf("Medicamento: %s\nquantidade: %d\nFabricante: %s\nLote: %s\nData de FabricaC'C#o: %02d/%02d/%04d\nData de Validade: %02d/%02d/%04d\nPreC'o de Compra: %.2f\nPreC'o de Venda: %.2f\nCategoria: %s\n\n", medicamento, quantidade, fabricante, lote, diaF, mesF, anoF, diaV, mesV, anoV, PrecoCompra, PrecoVenda, categoria);
+		printf("Medicamento: %s\nquantidade: %d\nFabricante: %s\nLote: %s\nData de Fabricação: %02d/%02d/%04d\nData de Validade: %02d/%02d/%04d\nPreço de Compra: %.2f\nPreço de Venda: %.2f\nCategoria: %s\n\n", medicamento, quantidade, fabricante, lote, diaF, mesF, anoF, diaV, mesV, anoV, PrecoCompra, PrecoVenda, categoria);
 	}
 	fclose(Medicamentos);
 	break;
@@ -175,7 +252,7 @@ case 1:
 
 
 case 2:
-rastrearlote(Medicamentos);
+	rastrearlote();
 
 }
 }
@@ -233,7 +310,7 @@ void sistemavendas(FILE *Medicamentos) {
 			quant = atoi(campos[1]);
 			printf("Quantas unidades deseja vender? ");
 			scanf("%d", &quantven);
-			printf("Pra quem estC! vendendo?\n");
+			printf("Pra quem está! vendendo?\n");
 			printf("Primeiro Nome: ");
 			scanf("%s", praquemvendeu1);
 			printf("Segundo Nome: ");
@@ -259,7 +336,9 @@ void sistemavendas(FILE *Medicamentos) {
 	fclose(Historico);
 	remove("Medicamentos.txt");
 	rename("temp.txt", "Medicamentos.txt");
+	remove("temp.txt");
 }
+
 void verhistorico() {
 	FILE *Historico;
 	Historico = fopen("historico.txt", "r");
@@ -280,33 +359,40 @@ int main() {
 	int opcaoLogin = 0;
 
 	while(opcaoLogin != 5) {
-		printf ("---> Estoque de Medicamentos\n\n---> MENU <---\n\n");
-		printf("1- Logar num usuario existente\n");
-		printf("2- Novo usuario\n");
-		printf("3- ver todos os usuarios cadastrados\n");
-		printf("4- deletar cadastrado\n");
-		printf("5- Sair\n");
-		printf("Digite sua opcao: ");
-		scanf ("%d", &opcaoLogin);
+		
+		opcaoLogin = MenuInicial();
+
 		switch(opcaoLogin) {
 		case 1:
-			Medicamentos = fopen("Medicamentos.txt", "a+");
+			Medicamentos = fopen("Medicamentos.txt", "r");
 			usuarios = fopen("cadastro.txt", "r");
+			if (Medicamentos == NULL) {
+				printf("ERRO ao abrir arquivo!\n");
+				return 0;
+			}
+			if (usuarios == NULL) {
+				printf("ERRO ao abrir arquivo!\n");
+				return 0;
+			}
+
 			int encontrado = 0;
 			int opcao = 0;
 			char  usuario_encontrar[50];
 			char senha_encontrar[50];
 			while(encontrado == 0) {
 				printf ("Usuario: ");
-				scanf("%s", usuario_encontrar);
+				scanf("%49s", usuario_encontrar);
 				printf ("Senha: ");
-				scanf("%s", senha_encontrar);
-				rewind(usuarios); // Volta para o inC-cio do arquivo para ler os dados desde o comeC'o
+				scanf("%49s", senha_encontrar);
+				rewind(usuarios); // Volta para o inicio do arquivo para ler os dados desde o começo
 				while(fscanf(usuarios, "%s %s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
 					if(strcmp(usuario, usuario_encontrar) == 0 && strcmp(senha, senha_encontrar) == 0) { //Compara os usuarios (usuario, usuario_encontrar)
 						encontrado = 1;
 					}
 				}
+				
+				
+				fclose(usuarios);
 
 				if(encontrado == 1) {
 					while(opcao != 3) {
@@ -319,11 +405,6 @@ int main() {
 						switch (opcao)
 						{
 						case 1: {
-							if (Medicamentos == NULL) {
-								printf("ERRO ao abrir arquivo!\n");
-							} else {
-								printf("Arquivo aberto com sucesso!\n\n");
-							}
 							cadastraMedicamento(Medicamentos);// Esse bgl puxa o codigo lC! do comeC'o, onde tem a funC'C#o cadastraMedicamento, e executa ele aqui dentro do case 1, ou seja, quando o usuario escolher a opC'C#o 1, ele vai executar o cC3digo da funC'C#o cadastraMedicamento.
 							break;
 						}
@@ -360,8 +441,6 @@ int main() {
 					printf("Usuario ou senha incorretos, tente novamente!\n");
 				}
 			}
-			fclose(Medicamentos);
-			fclose(usuarios);
 			break;
 
 		case 2:
@@ -369,44 +448,11 @@ int main() {
 			break;
 
 		case 3: //Ver todos os usuarios
-			usuarios = fopen("cadastro.txt", "r");
-			rewind(usuarios);
-			printf("Usuarios cadastrados:\n");
-			while(fscanf(usuarios, "%s %s", usuario, senha) != EOF) {
-				printf("Nome: %s\n", usuario);
-			}
-			fclose(usuarios);
+			verificarUsuario(usuarios);
 			break;
 
 		case 4: { //deletar
-			char busca[50];
-			FILE *temp;
-			temp = fopen("temp.txt", "w"); //w para apagar todos os dados e gravar novos nomes
-			usuarios = fopen("cadastro.txt", "r"); //r para ler os nomes e comparar
-			printf("Digite o nome para deletar: ");
-			scanf("%s", busca);
-			int c = 0;
-			while((c = getchar()) != '\n' && c != EOF);
-			int usuarioEncontrado = 0;
-			while(fscanf(usuarios, "%49s %49s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
-				if(strcmp(usuario, busca) != 0) { //Compara os usuarios (usuario, busca) e se for diferente, grava no temp
-					fprintf(temp, "%s %s\n", usuario, senha);
-				}
-				else { // encontrou o usuario, entao nao grava no temp, ou seja, deleta ele do cadastro
-					usuarioEncontrado = 1;
-				}
-			}
-			if(usuarioEncontrado == 0) {
-				printf("Usuario nao encontrado!\n");
-			}
-			else {
-				fclose(usuarios);
-				fclose(temp);
-				remove("cadastro.txt");
-				rename("temp.txt", "cadastro.txt");
-				remove("temp.txt");
-				printf("processo concluido!\n\n");
-			}
+			DeletarUsuario(usuarios);
 			break;
 		}
 		default:
@@ -415,4 +461,4 @@ int main() {
 	}
 	return 0;
 }
-//https://www.onlinegdb.com/#tab-stderr
+

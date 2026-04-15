@@ -157,6 +157,8 @@ void DeletarUsuario(FILE *usuarios) {
 		}
 		if(usuarioEncontrado == 0) {
 			printf("Usuario nao encontrado!\n");
+			fclose(usuarios);
+			fclose(temp);
 		}
 		else {
 			fclose(usuarios);
@@ -189,9 +191,8 @@ if(arquivo== NULL){
     printf("Erro ao acessar o banco de dados\n");
     return;
 }
-  int n=50;
-  char lotebusca[n];
-  char med[n], lote[n], cat[n], fab[n];
+  char lotebusca[50];
+  char med[50], lote[50], cat[50], fab[50];
   int quantidade, diaF, mesF, anoF, diaV, mesV, anoV;
   float PrecoCompra, PrecoVenda;
 
@@ -378,6 +379,7 @@ int main() {
 			int encontrado = 0;
 			int opcao = 0;
 			char  usuario_encontrar[50];
+			char usuario_loggado[50];
 			char senha_encontrar[50];
 			while(encontrado == 0) {
 				printf ("Usuario: ");
@@ -387,6 +389,7 @@ int main() {
 				rewind(usuarios); // Volta para o inicio do arquivo para ler os dados desde o começo
 				while(fscanf(usuarios, "%s %s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
 					if(strcmp(usuario, usuario_encontrar) == 0 && strcmp(senha, senha_encontrar) == 0) { //Compara os usuarios (usuario, usuario_encontrar)
+						strcpy(usuario_loggado, usuario_encontrar); // Guarda o nome do usuario loggado para usar depois
 						encontrado = 1;
 					}
 				}
@@ -396,7 +399,7 @@ int main() {
 
 				if(encontrado == 1) {
 					while(opcao != 3) {
-						printf ("\n\nBem-vindo de volta, %s\n\n", usuario);
+						printf ("\n\nBem-vindo de volta, %s\n\n", usuario_loggado);
 						printf ("1- Cadastrar medicamento\n");
 						printf ("2- Acessar Estoque\n");
 						printf ("3- Sair\n\n");

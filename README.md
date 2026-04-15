@@ -1,12 +1,10 @@
-# 💊 Sistema de Gerenciamento de Estoque de Medicamentos
+# 💊 Sistema de Estoque de Medicamentos
 
 Este projeto é um sistema simples de *controle de estoque de medicamentos*, desenvolvido em linguagem C.
 
 O sistema permite o cadastro de usuários, autenticação e gerenciamento de medicamentos.
 
 ---
-## Status
-Projeto em desenvolvimento.
 
 ## 📌 Funcionalidades
 
@@ -18,9 +16,7 @@ Projeto em desenvolvimento.
 * Remoção de usuários
 
 ### 💊 Medicamentos
-
 * Cadastro de medicamentos com:
-
   * Nome
   * Quantidade
   * Fabricante
@@ -29,26 +25,61 @@ Projeto em desenvolvimento.
   * Data de validade
   * Preço de compra e venda
   * Categoria
-* Validação de dados:
+- Listagem completa do estoque
+- Busca de medicamentos por lote
 
+* Validação de dados:
   * Data de validade não pode ser anterior à fabricação
   * Preço de venda não pode ser menor que o de compra
-* Visualização completa do estoque
+
+### 🏪 Estoque
+- Visualização geral do estoque
+
+### 💰 Sistema de vendas
+- Registro de vendas de medicamentos
+- Atualização automática do estoque
+- Registro de histórico de vendas
+
+
+## 🧠 Estrutura do sistema
+
+O sistema é baseado em menus interativos:
+
+- Menu principal (login e gerenciamento de usuários)
+- Menu interno do sistema (após login)
+- Menu de estoque (consulta e vendas)
+
+---
+
+## 🗂️ Arquivos utilizados
+
+O sistema cria e manipula os seguintes arquivos:
+
+- `cadastro.txt` → Armazena usuários e senhas
+- `Medicamentos.txt` → Armazena o estoque de medicamentos
+- `historico.txt` → Registra todas as vendas realizadas
+- `temp.txt` → Arquivo temporário para operações de atualização
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+- Linguagem C
+- Biblioteca padrão:
+  - `stdio.h`
+  - `string.h`
+  - `stdlib.h`
 
 ---
 
 ## Em desenvolvimento
-* Adição da biblioteca *time.h*, para datas de validade
-* Sistema de vendas de medicamentos
-* Histórico de vendas
-* Rastreamento de medicamentos por lote
-* Verificação de medicamentos vencidos
-* Refatoração do código
-  
----
-## 🛠️ Tecnologias utilizadas
-
-* Linguagem: *C*
+* Adição da biblioteca *time.h*, para datas de validade.
+* Verificação de medicamentos vencidos.
+* Editar medicamentos.
+* Venda multipla de medicamentos.
+* Verificação de medicamentos e usuários duplicados.
+* Rastreamento de categoria.(opção na hora da venda).
+* Refatoração do código.
 
 ---
 

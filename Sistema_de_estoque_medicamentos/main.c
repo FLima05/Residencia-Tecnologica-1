@@ -244,7 +244,7 @@ case 1:
 	float PrecoCompra;
 	float PrecoVenda;
 	char categoria[50];
-	while(fscanf(Medicamentos, "%49[^-]-%d-%49[^-]-%49[^-]-%d/%d/%d-%d/%d/%d-%f-%f-%s\n", medicamento, &quantidade, fabricante, lote, &diaF, &mesF, &anoF, &diaV, &mesV, &anoV, &PrecoCompra, &PrecoVenda, categoria) != EOF) {
+	while(fscanf(Medicamentos, "%49[^-]-%d-%49[^-]-%49[^-]-%d/%d/%d;%d/%d/%d;%f;%f;%s\n", medicamento, &quantidade, fabricante, lote, &diaF, &mesF, &anoF, &diaV, &mesV, &anoV, &PrecoCompra, &PrecoVenda, categoria) != EOF) {
 		printf("Medicamento: %s\nquantidade: %d\nFabricante: %s\nLote: %s\nData de Fabricação: %02d/%02d/%04d\nData de Validade: %02d/%02d/%04d\nPreço de Compra: %.2f\nPreço de Venda: %.2f\nCategoria: %s\n\n", medicamento, quantidade, fabricante, lote, diaF, mesF, anoF, diaV, mesV, anoV, PrecoCompra, PrecoVenda, categoria);
 	}
 	fclose(Medicamentos);
@@ -351,6 +351,96 @@ void verhistorico() {
 		printf("%s. \n", buffer);
 	}
 }
+void editarMedicamento(){
+FILE *Medicamentos;
+FILE *temp;
+Medicamentos = fopen("Medicamentos.txt" , "r");
+temp = fopen("temp.txt" , "w");
+char buffer [300];
+char campos [10][300];
+int contador = 1;
+int posicao;
+char *info;
+int opcao;
+int OpcaoCategoria;
+if (Medicamentos == NULL){
+printf("Erro ao abrir o arquivo");}
+if (temp == NULL){
+printf("Erro ao abrir o arquivo");}
+while (fgets(buffer, sizeof(buffer), Medicamentos) != NULL){
+posicao = 0;
+char bufferOriginal[300];
+strcpy(bufferOriginal, buffer);
+info = strtok(buffer, ";");
+while (info != NULL){
+strcpy (campos[posicao], info);
+info = strtok(NULL, ";");
+posicao ++;}
+printf("%d - %s;%s;%s;%s;%s;%s;%s;%s;%s \n",contador,campos[0],campos[1],campos[2],campos[3],campos[4],campos[5],campos[6],campos[7],campos[8]);
+contador ++;}
+fclose(Medicamentos);
+printf("Qual medicamento deseja editar? ");
+scanf("%d" , &opcao);
+contador = 1;
+Medicamentos = fopen("Medicamentos.txt" , "r");
+if (Medicamentos == NULL){
+printf("Erro ao abrir o arquivo");}
+while (fgets(buffer, sizeof(buffer), Medicamentos) != NULL){
+posicao = 0;
+char bufferOriginal[300];
+strcpy(bufferOriginal, buffer);
+info = strtok(buffer, ";");
+while (info != NULL){
+strcpy (campos[posicao], info);
+info = strtok(NULL, ";");
+posicao ++;}
+if (contador == opcao){
+printf("Medicamento escolhido para editar:  %s - %s - %s - %s - %s - %s - %s - %s - %s",campos[0],campos[1],campos[2],campos[3],campos[4],campos[5],campos[6],campos[7],campos[8]);
+printf("Digite o nome do medicamento: ");
+scanf(" %[^\n]", campos[0]);
+printf("Digite a quantidade do medicamento: ");
+scanf("%s", campos[1]);
+printf("Digite o fabricante:");
+scanf("%s", campos[2]);
+printf("Digite o lote: ");
+scanf("%s", campos[3]);
+printf("Digite a data de fabricação(utilize o formato dd/mm/aaaa): ");
+scanf("%s", campos[4]);
+printf("Digite a data de validade(utilize o formato dd/mm/aaaa):  ");
+scanf("%s", campos[5]);
+printf("Digite o preço de compra (formato: R$00,00): R$");
+scanf("%s", campos[6]);
+printf("Digite o preço de venda (formato: R$00,00): R$");
+scanf("%s", campos[7]);
+printf("Qual é a categoria desse medicamento:\n");
+printf("1- Analgesico \n2- Antibiotico \n3- Anti-inflamatorio \n4- antidepressivos \n5- outros\n");	
+printf("Opcao: ");
+scanf("%d" , &OpcaoCategoria);
+while (OpcaoCategoria < 1 || OpcaoCategoria > 5){
+printf("ERRO!!Digite algumas das opções listadas acima.\n");
+printf("Qual é a categoria desse medicamento:\n");
+printf("1- Analgesico \n2- Antibiotico \n3- Anti-inflamatorio \n4- antidepressivos \n5- outros\n");	
+printf("Opcao: ");
+scanf("%d" , &OpcaoCategoria);}
+if (OpcaoCategoria == 1){
+strcpy( campos[8], "Analgesico");}
+else if (OpcaoCategoria == 2){
+strcpy( campos[8], "Antibiotico");}
+else if (OpcaoCategoria == 3){
+strcpy( campos[8], "Anti-inflamatorio");}
+else if (OpcaoCategoria == 4){
+strcpy( campos[8], "antidepressivos");}
+else if (OpcaoCategoria == 5){
+strcpy( campos[8], "outros");}
+fprintf (temp, "%s;%s;%s;%s;%s;%s;%s;%s;%s\n",campos[0],campos[1],campos[2],campos[3],campos[4],campos[5],campos[6],campos[7],campos[8]);}
+else{
+fputs(bufferOriginal, temp);}
+contador++;}
+fclose(Medicamentos);
+fclose(temp);
+remove("Medicamentos.txt");
+rename("temp.txt", "Medicamentos.txt");
+}
 
 int main() {
 	FILE *Medicamentos;
@@ -418,6 +508,7 @@ int main() {
 							printf("1- Ver Estoque\n");
 							printf("2- Fazer Venda\n");
 							printf("3- Ver Historico de Vendas\n");
+							printf("4- Editar Medicamento\n");
 							printf("Digite sua opcao:");
 							scanf("%d", &opcaoestoque);
 							switch (opcaoestoque) {
@@ -432,6 +523,9 @@ int main() {
 							case 3: {
 								verhistorico();
 								break;
+							}
+							case 4: {
+								editarMedicamento();
 							}
 							default: {
 								printf("Opcao Invalida");

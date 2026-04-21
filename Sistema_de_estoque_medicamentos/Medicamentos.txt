@@ -1,2 +1,21 @@
 lean-100-cimde-0292-22/1/2022-22/1/2024-10.00-15.00-Anti_inflamatorio
 
+Tylenol Paracetamol Bebe 100mg/ml-40-Johnson&Johnson-TYL2026A-10/03/2026-10/03/2028-12.00-22.90-Analgesico
+Neosaldina 30 drageas-60-Hypera-NEO2026A-15/02/2026-15/02/2028-14.00-26.90-Analgesico
+Novalgina Flash Dipirona 1g-50-Hypera-NOV2026B-20/03/2026-20/03/2028-18.50-32.90-Analgesico
+Paracetamol Bwell 750mg-20-Airela-PAR2026A-05/03/2026-05/03/2028-8.50-16.90-Analgesico
+
+Amoxicilina 500mg-15-EMS-AMX2026A-10/01/2026-10/01/2028-18.00-29.90-Antibiotico
+Neomicina Bacitracina Pomada 15g-10-Medley-NEO2026A-12/02/2026-12/02/2028-12.00-22.50-Antibiotico
+Cefalexina 500mg-8-UniaoQuimica-CEF2026A-20/02/2026-20/02/2028-20.00-34.90-Antibiotico
+Pantoprazol 40mg-42-EMS-PAN2026A-01/03/2026-01/03/2028-25.00-42.90-outros
+
+Alenthus XR Venlafaxina 150mg-30-Medley-ALX15001-10/03/2026-10/03/2028-55.00-89.90-Antidepressivos
+Mirtazapina 30mg-30-Medley-MTZ3001-12/02/2026-12/02/2028-40.00-75.00-Antidepressivos
+Donaren Trazodona 50mg-60-Apsen-DNR5001-05/01/2026-05/01/2028-35.00-68.00-Antidepressivos
+Donaren Trazodona 50mg-60-Apsen-DNR5002-20/04/2026-20/04/2028-35.00-68.00-Antidepressivos
+
+Artrolive Glicosamina + Condroitina 1,5g-30-Aché-ART15001-10/02/2026-10/02/2028-85.00-129.90-Anti_inflamatorio
+Advil Ibuprofeno 400mg-12-Johnson&Johnson-ADV40001-05/03/2026-05/03/2028-12.00-24.90-Anti_inflamatorio
+Nimesulida 100mg-12-Eurofarma-NIM10001-15/01/2026-15/01/2028-6.50-14.90-Anti_inflamatorio
+Ibuprofeno 600mg-20-PratiDonaduzzi-IBU60001-20/04/2026-20/04/2028-9.00-18.90-Anti_inflamatorio

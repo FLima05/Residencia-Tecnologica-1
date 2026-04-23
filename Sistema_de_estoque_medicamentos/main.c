@@ -18,6 +18,63 @@ int MenuInicial() {
 	return opcaoLogin;
 }
 
+int MenuMedicamento() {
+	
+	int opcao = 0;
+
+	printf ("---> MENU <---\n\n");
+	printf ("1- Cadastrar medicamento\n");
+	printf ("2- Acessar Estoque\n");
+	printf ("3- Sair\n\n");
+	printf ("Digite sua opcao: ");
+	scanf ("%d", &opcao);
+	
+	return opcao;
+}
+
+int MenuEstoque() {
+	
+	int opcaoestoque;
+
+	printf("--->MENU ESTOQUE<---\n");
+	printf("1- Ver Estoque\n");
+	printf("2- Fazer Venda\n");
+	printf("3- Ver Historico de Vendas\n");
+	printf("Digite sua opcao:");
+	scanf("%d", &opcaoestoque);
+	
+	return opcaoestoque;
+}
+
+int vrfy_login(FILE *usuarios) {
+	
+	usuarios = fopen("cadastro.txt", "r");
+
+	char usuario_encontrar[50], senha_encontrar[50];
+	char usuario[50], senha[50];
+	char usuario_loggado[50];
+	int encontrado = 0;
+
+	printf ("Usuario: ");
+	scanf("%49s", usuario_encontrar);
+	printf ("Senha: ");
+	scanf("%49s", senha_encontrar);
+	rewind(usuarios); // Volta para o inicio do arquivo para ler os dados desde o começo
+	while(fscanf(usuarios, "%s %s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
+		if(strcmp(usuario, usuario_encontrar) == 0 && strcmp(senha, senha_encontrar) == 0) { //Compara os usuarios (usuario, usuario_encontrar)
+			strcpy(usuario_loggado, usuario_encontrar); // Guarda o nome do usuario loggado para usar depois
+				encontrado = 1;
+		}
+	}
+	
+	if(encontrado == 1) {
+		printf ("\n\nBem-vindo de volta, %s\n\n", usuario_loggado);
+	}
+
+	fclose(usuarios);
+
+	return encontrado;
+}
 
 void cadastraMedicamento(FILE *Medicamentos) {
 	
@@ -355,71 +412,49 @@ void verhistorico() {
 int main() {
 	FILE *Medicamentos;
 	FILE *usuarios;
-	char usuario[50];
-	char senha[50];
 	int opcaoLogin = 0;
 
 	while(opcaoLogin != 5) {
 		
+		Medicamentos = fopen("Medicamentos.txt", "r");
+		usuarios = fopen("cadastro.txt", "r");
+		if (Medicamentos == NULL) {
+			printf("ERRO ao abrir arquivo!\n");
+			return 0;
+		}
+		if (usuarios == NULL) {
+			printf("ERRO ao abrir arquivo!\n");
+			return 0;
+		}
+		
 		opcaoLogin = MenuInicial();
-
+		
 		switch(opcaoLogin) {
 		case 1:
-			Medicamentos = fopen("Medicamentos.txt", "r");
-			usuarios = fopen("cadastro.txt", "r");
-			if (Medicamentos == NULL) {
-				printf("ERRO ao abrir arquivo!\n");
-				return 0;
-			}
-			if (usuarios == NULL) {
-				printf("ERRO ao abrir arquivo!\n");
-				return 0;
-			}
-
+			
 			int encontrado = 0;
 			int opcao = 0;
-			char  usuario_encontrar[50];
-			char usuario_loggado[50];
-			char senha_encontrar[50];
 			while(encontrado == 0) {
-				printf ("Usuario: ");
-				scanf("%49s", usuario_encontrar);
-				printf ("Senha: ");
-				scanf("%49s", senha_encontrar);
-				rewind(usuarios); // Volta para o inicio do arquivo para ler os dados desde o começo
-				while(fscanf(usuarios, "%s %s", usuario, senha) != EOF) { //Percorre todo arquivo do cadastro (cadastro.txt)
-					if(strcmp(usuario, usuario_encontrar) == 0 && strcmp(senha, senha_encontrar) == 0) { //Compara os usuarios (usuario, usuario_encontrar)
-						strcpy(usuario_loggado, usuario_encontrar); // Guarda o nome do usuario loggado para usar depois
-						encontrado = 1;
-					}
-				}
 				
-				
-				fclose(usuarios);
+				encontrado = vrfy_login(usuarios);
 
 				if(encontrado == 1) {
 					while(opcao != 3) {
-						printf ("\n\nBem-vindo de volta, %s\n\n", usuario_loggado);
-						printf ("1- Cadastrar medicamento\n");
-						printf ("2- Acessar Estoque\n");
-						printf ("3- Sair\n\n");
-						printf ("Digite sua opcao: ");
-						scanf ("%d", &opcao);
-						switch (opcao)
-						{
-						case 1: {
-							cadastraMedicamento(Medicamentos);// Esse bgl puxa o codigo lC! do comeC'o, onde tem a funC'C#o cadastraMedicamento, e executa ele aqui dentro do case 1, ou seja, quando o usuario escolher a opC'C#o 1, ele vai executar o cC3digo da funC'C#o cadastraMedicamento.
+						
+						opcao = MenuMedicamento();
+						
+						switch (opcao) {
+						
+							case 1: {
+							cadastraMedicamento(Medicamentos);// Esse bgl puxa o codigo! do começo, onde tem a função cadastraMedicamento, e executa ele aqui dentro do case 1, ou seja, quando o usuario escolher a opção 1, ele vai executar o codigo da função cadastraMedicamento.
 							break;
 						}
-						int opcaoestoque;
-						case 2:
-							printf("Acessando estoque...\n\n\n");
-							printf("--->MENU ESTOQUE<---\n");
-							printf("1- Ver Estoque\n");
-							printf("2- Fazer Venda\n");
-							printf("3- Ver Historico de Vendas\n");
-							printf("Digite sua opcao:");
-							scanf("%d", &opcaoestoque);
+						
+						case 2: {
+							int opcaoestoque = 0;
+
+							opcaoestoque = MenuEstoque();
+							
 							switch (opcaoestoque) {
 							case 1: {
 								acessarEstoque(Medicamentos);
@@ -436,6 +471,8 @@ int main() {
 							default: {
 								printf("Opcao Invalida");
 							}
+							}
+							break;
 							}
 						}
 					}
